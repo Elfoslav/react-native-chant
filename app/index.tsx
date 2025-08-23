@@ -14,6 +14,9 @@ import { useSettings } from "../lib/context/SettingsContext";
 import { colors } from "../lib/colors";
 import { defaultFont } from "../lib/fonts";
 
+const oneDigitDots = "........................";
+const doubleDigitDots = "......................";
+
 export default function Index() {
 	const { settings } = useSettings();
 	const [counter, setCounter] = useState(0);
@@ -124,7 +127,8 @@ export default function Index() {
 				<View style={styles.roundsWrapper}>
 					{roundsList.map((r) => (
 						<Text key={r.round} style={styles.rounds}>
-							{r.round} ........................ {formatTime(r.time)}
+							{r.round} {r.round < 10 ? oneDigitDots : doubleDigitDots}{" "}
+							{formatTime(r.time)}
 						</Text>
 					))}
 				</View>
@@ -165,7 +169,7 @@ const styles = StyleSheet.create({
 	},
 	roundsWrapper: {
 		marginTop: 20,
-		marginBottom: 45,
+		marginBottom: 60,
 	},
 	rounds: {
 		fontFamily: defaultFont,
