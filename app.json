@@ -4,7 +4,7 @@
     "slug": "Chant",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/images/icon.png",
+    "icon": "./assets/images/icon.jpg",
     "scheme": "chant",
     "userInterfaceStyle": "automatic",
     "newArchEnabled": true,
@@ -13,25 +13,44 @@
     },
     "android": {
       "adaptiveIcon": {
-        "foregroundImage": "./assets/images/adaptive-icon.png",
-        "backgroundColor": "#ffffff"
+        "foregroundImage": "./assets/images/pin.jpg",
+        "backgroundColor": "#000000"
       },
       "edgeToEdgeEnabled": true
     },
     "web": {
       "bundler": "metro",
       "output": "static",
-      "favicon": "./assets/images/favicon.png"
+      "favicon": "./assets/images/pin.jpg"
     },
     "plugins": [
       "expo-router",
       [
         "expo-splash-screen",
         {
-          "image": "./assets/images/splash-icon.png",
+          "image": "./assets/images/icon.jpg",
           "imageWidth": 200,
           "resizeMode": "contain",
-          "backgroundColor": "#ffffff"
+          "backgroundColor": "#000000"
+        }
+      ],
+      [
+        "expo-font",
+        {
+          "fonts": ["./assets/fonts/din-condensed-bold.ttf"],
+          "android": {
+            "fonts": [
+              {
+                "fontFamily": "DINCondensed-Bold",
+                "fontDefinitions": [
+                  {
+                    "path": "./assets/fonts/din-condensed-bold.ttf",
+                    "weight": 800
+                  }
+                ]
+              }
+            ]
+          }
         }
       ]
     ],
