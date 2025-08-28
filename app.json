@@ -1,6 +1,6 @@
 {
   "expo": {
-    "name": "Chant",
+    "name": "Chant!",
     "slug": "Chant",
     "version": "1.0.0",
     "orientation": "portrait",
@@ -12,6 +12,8 @@
       "supportsTablet": true
     },
     "android": {
+      "package": "com.hromnik.chant",
+      "versionCode": 1,
       "adaptiveIcon": {
         "foregroundImage": "./assets/images/pin.jpg",
         "backgroundColor": "#000000"
@@ -31,13 +33,19 @@
           "image": "./assets/images/icon.jpg",
           "imageWidth": 200,
           "resizeMode": "contain",
-          "backgroundColor": "#000000"
+          "backgroundColor": "#000000",
+          "dark": {
+            "image": "./assets/images/icon.jpg",
+            "backgroundColor": "#000000"
+          },
         }
       ],
       [
         "expo-font",
         {
-          "fonts": ["./assets/fonts/din-condensed-bold.ttf"],
+          "fonts": [
+            "./assets/fonts/din-condensed-bold.ttf"
+          ],
           "android": {
             "fonts": [
               {
@@ -56,6 +64,12 @@
     ],
     "experiments": {
       "typedRoutes": true
+    },
+    "extra": {
+      "router": {},
+      "eas": {
+        "projectId": "4827a914-6466-4632-9433-ced93bf890a0"
+      }
     }
   }
 }

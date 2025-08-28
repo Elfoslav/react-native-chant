@@ -1,12 +1,12 @@
 import { useEffect } from "react";
 import { useFonts } from "expo-font";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
-import { Drawer } from "expo-router/drawer";
 import { DarkTheme, ThemeProvider } from "@react-navigation/native";
 import * as SplashScreen from "expo-splash-screen";
-import { colors } from "../lib/colors";
-import { defaultFont } from "@/lib/fonts";
-import { SettingsProvider } from "../lib/context/SettingsContext";
+import { colors } from "@/lib/colors";
+import { SettingsProvider } from "@/lib/context/SettingsContext";
+import { TimerProvider } from "@/lib/context/TimerContext";
+import { AppDrawer } from "@/components/AppDrawer";
 
 // 👈 prevent auto-hide until fonts are ready
 SplashScreen.preventAutoHideAsync();
@@ -39,38 +39,13 @@ export default function Layout() {
 
 	return (
 		<SettingsProvider>
-			<GestureHandlerRootView style={{ flex: 1, backgroundColor: colors.bg }}>
-				<ThemeProvider value={MyDarkTheme}>
-					<Drawer
-						screenOptions={{
-							swipeEnabled: false, // 🚫 disables opening drawer by swiping
-							drawerStyle: { backgroundColor: colors.bg },
-							headerStyle: { backgroundColor: colors.bg },
-							headerTintColor: colors.text,
-							// headerTitleStyle: {
-							// 	fontFamily: "DINCondensed-Bold",
-							// },
-							drawerLabelStyle: {
-								color: colors.text,
-								fontFamily: defaultFont, // 👈 set your custom font here
-								fontSize: 24,
-							},
-						}}
-					>
-						<Drawer.Screen
-							name="index"
-							options={{
-								drawerLabel: "Chant!",
-								title: "",
-							}}
-						/>
-						<Drawer.Screen
-							name="settings"
-							options={{ drawerLabel: "Settings", title: "" }}
-						/>
-					</Drawer>
-				</ThemeProvider>
-			</GestureHandlerRootView>
+			<TimerProvider>
+				<GestureHandlerRootView style={{ flex: 1, backgroundColor: colors.bg }}>
+					<ThemeProvider value={MyDarkTheme}>
+						<AppDrawer />
+					</ThemeProvider>
+				</GestureHandlerRootView>
+			</TimerProvider>
 		</SettingsProvider>
 	);
 }
