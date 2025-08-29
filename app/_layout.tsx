@@ -3,10 +3,10 @@ import { useFonts } from "expo-font";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 import { DarkTheme, ThemeProvider } from "@react-navigation/native";
 import * as SplashScreen from "expo-splash-screen";
-import { colors } from "@/lib/colors";
-import { SettingsProvider } from "@/lib/context/SettingsContext";
-import { TimerProvider } from "@/lib/context/TimerContext";
-import { AppDrawer } from "@/components/AppDrawer";
+import { colors } from "../lib/colors";
+import { SettingsProvider } from "../lib/context/SettingsContext";
+import { TimerProvider } from "../lib/context/TimerContext";
+import { AppDrawer } from "../components/AppDrawer";
 
 // 👈 prevent auto-hide until fonts are ready
 SplashScreen.preventAutoHideAsync();

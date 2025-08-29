@@ -6,7 +6,7 @@ import {
 	StyleSheet,
 	Pressable,
 } from "react-native";
-import { useTimerContext } from "@/lib/context/TimerContext";
+import { useTimerContext } from "../lib/context/TimerContext";
 import { colors } from "../lib/colors";
 import { defaultFont } from "../lib/fonts";
 

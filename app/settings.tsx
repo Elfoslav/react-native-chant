@@ -1,7 +1,6 @@
-import { useEffect } from "react";
 import { Text, View, StyleSheet } from "react-native";
 import { colors } from "../lib/colors";
-import { defaultFont } from "@/lib/fonts";
+import { defaultFont } from "../lib/fonts";
 import CustomCheckbox from "../components/CustomCheckbox";
 import { useSettings } from "../lib/context/SettingsContext";
 

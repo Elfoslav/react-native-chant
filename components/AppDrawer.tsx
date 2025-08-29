@@ -1,4 +1,3 @@
-import { useState } from "react";
 import { View, Pressable, Text, Image } from "react-native";
 import { Drawer } from "expo-router/drawer";
 import { DrawerNavigationProp } from "@react-navigation/drawer";
@@ -8,9 +7,9 @@ import {
 	DarkTheme,
 } from "@react-navigation/native";
 import { Ionicons } from "@expo/vector-icons";
-import { colors } from "@/lib/colors";
-import { defaultFont } from "@/lib/fonts";
-import { useTimerContext } from "@/lib/context/TimerContext";
+import { colors } from "../lib/colors";
+import { defaultFont } from "../lib/fonts";
+import { useTimerContext } from "../lib/context/TimerContext";
 
 const HEADER_ICON_SIZE = 36;
 
