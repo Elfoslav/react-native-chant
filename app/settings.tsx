@@ -1,37 +1,59 @@
-import { Text, View, StyleSheet } from "react-native";
+import React, { useState, useRef, useEffect } from "react";
+import { Text, View, StyleSheet, TextInput, Keyboard } from "react-native";
+import Toast from "react-native-toast-message";
 import { colors } from "../lib/colors";
 import { defaultFont } from "../lib/fonts";
 import CustomCheckbox from "../components/CustomCheckbox";
 import { useSettings } from "../lib/context/SettingsContext";
+import { useCounter } from "../lib/context/CounterContext";
+import { useTimer } from "../lib/context/TimerContext";
 
 const ACTIONS = {
-	RESET_COUNTER: "resetCounter",
 	VIBRATE_ON_EACH: "vibrateOnEach",
 	LONG_VIBRATE_ON_TAP: "longVibrateOnLap",
 	VOLUME_BUTTON_SWIPES: "volumeButtonSwipes",
-	STOPWATCH: "stopwatch",
+	ROUNDS_COUNT: "roundsCount",
 } as const;
 
 export default function SettingsPage() {
+	const roundsInputRef = useRef<TextInput>(null);
+	const { resetCounter } = useCounter();
+	const { stopTimer } = useTimer();
 	const { settings, updateSetting } = useSettings();
+	const [rounds, setRounds] = useState<number | null>(settings.roundsCount);
+
+	useEffect(() => {
+		// Detect press back on keyboard
+		const keyboardDidHideListener = Keyboard.addListener(
+			"keyboardDidHide",
+			() => {
+				// Keyboard has been dismissed, remove cursor
+				roundsInputRef.current?.blur();
+			}
+		);
+
+		return () => keyboardDidHideListener.remove();
+	}, []);
+
+	const onResetCounter = () => {
+		Toast.show({
+			type: "customToast", // 'success' | 'error' | 'info'
+			text1: "Counter reset",
+			text2: "The counter has been resetted",
+			position: "bottom",
+			visibilityTime: 4500, // milliseconds
+		});
+
+		resetCounter();
+		stopTimer();
+	};
 
 	return (
 		<View style={styles.container}>
 			<View style={styles.flexRow}>
-				<Text
-					style={styles.text}
-					onPress={() =>
-						updateSetting(ACTIONS.RESET_COUNTER, !settings.resetCounter)
-					}
-				>
+				<Text style={styles.text} onPress={onResetCounter}>
 					reset counter
 				</Text>
-				<CustomCheckbox
-					checked={settings.resetCounter}
-					onChange={() =>
-						updateSetting(ACTIONS.RESET_COUNTER, !settings.resetCounter)
-					}
-				/>
 			</View>
 			<View style={styles.flexRow}>
 				<Text
@@ -71,7 +93,7 @@ export default function SettingsPage() {
 					}
 				/>
 			</View>
-			<View style={styles.flexRow}>
+			{/* <View style={styles.flexRow}>
 				<Text
 					style={styles.text}
 					onPress={() =>
@@ -92,17 +114,24 @@ export default function SettingsPage() {
 						)
 					}
 				/>
-			</View>
+			</View> */}
 			<View style={styles.flexRow}>
-				<Text
-					style={styles.text}
-					onPress={() => updateSetting(ACTIONS.STOPWATCH, !settings.stopwatch)}
-				>
-					stopwatch
-				</Text>
-				<CustomCheckbox
-					checked={settings.stopwatch}
-					onChange={() => updateSetting(ACTIONS.STOPWATCH, !settings.stopwatch)}
+				<Text style={styles.text}>rounds count</Text>
+				<TextInput
+					ref={roundsInputRef}
+					value={rounds === null ? undefined : String(rounds)}
+					style={styles.input}
+					keyboardType="numeric"
+					selectionColor="red"
+					maxLength={3}
+					onEndEditing={() =>
+						rounds && updateSetting(ACTIONS.ROUNDS_COUNT, rounds)
+					}
+					onChangeText={(text) => {
+						// Parse text into number, fallback to null if empty
+						const num = text ? parseInt(text, 10) : null;
+						setRounds(num);
+					}}
 				/>
 			</View>
 		</View>
@@ -129,5 +158,16 @@ const styles = StyleSheet.create({
 		borderColor: "red", // 👈 this applies if not checked
 		borderWidth: 2,
 		borderRadius: 4,
+	},
+	input: {
+		borderColor: "red",
+		color: "red",
+		borderWidth: 2,
+		borderRadius: 4,
+		paddingVertical: 0,
+		lineHeight: 8,
+		height: 30,
+		width: 40,
+		textAlign: "center",
 	},
 });

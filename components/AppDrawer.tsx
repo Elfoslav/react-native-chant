@@ -9,7 +9,7 @@ import {
 import { Ionicons } from "@expo/vector-icons";
 import { colors } from "../lib/colors";
 import { defaultFont } from "../lib/fonts";
-import { useTimerContext } from "../lib/context/TimerContext";
+import { useTimer } from "../lib/context/TimerContext";
 
 const HEADER_ICON_SIZE = 36;
 
@@ -27,7 +27,7 @@ export const AppDrawer = () => {
 		showRounds,
 		isRunning,
 		toggleShowRounds,
-	} = useTimerContext();
+	} = useTimer();
 
 	const renderHeaderLeft = (
 		navigation: DrawerNavigationProp<DrawerParamList>
@@ -58,9 +58,9 @@ export const AppDrawer = () => {
 					drawerStyle: { backgroundColor: colors.bg },
 					headerStyle: { backgroundColor: colors.bg },
 					headerTintColor: colors.text,
-					// headerTitleStyle: {
-					// 	fontFamily: "DINCondensed-Bold",
-					// },
+					headerTitleStyle: {
+						fontFamily: "DINCondensed-Bold",
+					},
 					drawerLabelStyle: {
 						color: colors.text,
 						fontFamily: defaultFont, // 👈 set your custom font here
@@ -79,7 +79,7 @@ export const AppDrawer = () => {
 									flex: 1,
 									flexDirection: "row",
 									gap: 40,
-									marginTop: 30,
+									marginTop: 4,
 									marginLeft: 20,
 								}}
 							>
@@ -123,26 +123,15 @@ export const AppDrawer = () => {
 										color={!isRunning ? colors.textActive : colors.text}
 									/>
 								</Pressable>
-								<View style={{ flexDirection: "column", alignItems: "center" }}>
-									<Text
-										style={{
-											color: colors.text,
-											fontSize: 32,
-											fontFamily: defaultFont,
-										}}
-									>
-										LAP
-									</Text>
-									<Text
-										style={{
-											color: colors.text,
-											fontSize: 26,
-											fontFamily: defaultFont,
-										}}
-									>
-										{formatTime(time)}
-									</Text>
-								</View>
+								<Text
+									style={{
+										color: colors.text,
+										fontSize: 32,
+										fontFamily: defaultFont,
+									}}
+								>
+									{formatTime(time)}
+								</Text>
 							</View>
 						),
 						headerLeft: () => renderHeaderLeft(navigation),
@@ -152,6 +141,14 @@ export const AppDrawer = () => {
 					name="settings"
 					options={({ navigation }) => ({
 						drawerLabel: "Settings",
+						title: "",
+						headerLeft: () => renderHeaderLeft(navigation),
+					})}
+				/>
+				<Drawer.Screen
+					name="about"
+					options={({ navigation }) => ({
+						drawerLabel: "About",
 						title: "",
 						headerLeft: () => renderHeaderLeft(navigation),
 					})}

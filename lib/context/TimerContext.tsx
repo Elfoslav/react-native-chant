@@ -1,19 +1,13 @@
 // lib/context/TimerContext.tsx
-import React, {
-	createContext,
-	useContext,
-	useState,
-	useRef,
-	useCallback,
-} from "react";
-import { Vibration, Platform } from "react-native";
-import * as Haptics from "expo-haptics";
+import React, { createContext, useContext, useState, useRef } from "react";
+import BackgroundTimer from "react-native-background-timer";
+import { Vibration } from "react-native";
+import { Round } from "../services/CounterService";
+import { useCounter } from "./CounterContext";
 import { useSettings } from "./SettingsContext";
 
-type Round = { round: number; time: number };
-
 interface TimerContextType {
-	counter: number;
+	count: number;
 	showRounds: boolean;
 	isRunning: boolean;
 	rounds: number;
@@ -32,86 +26,103 @@ const TimerContext = createContext<TimerContextType | undefined>(undefined);
 export const TimerProvider: React.FC<{ children: React.ReactNode }> = ({
 	children,
 }) => {
-	const { settings } = useSettings(); // global vibration settings
-	const [counter, setCounter] = useState(0);
+	const {
+		counter: counterData,
+		setCounter,
+		updateCounter,
+		updateCounterMultiple,
+	} = useCounter();
+	const { count, rounds, roundTime, roundsList } = counterData;
+	const { settings } = useSettings();
+
 	const [showRounds, setShowRounds] = useState(true);
-	const [rounds, setRounds] = useState(0);
-	const [time, setTime] = useState(0);
 	const [isRunning, setIsRunning] = useState(false);
-	const [roundsList, setRoundsList] = useState<Round[]>([]);
 
 	const intervalRef = useRef<number | null>(null);
 	const lastTapRef = useRef(0);
 
-	const startTimer = useCallback(() => {
+	const startTimer = () => {
 		if (intervalRef.current) return;
-		intervalRef.current = setInterval(
-			() => setTime((prev) => prev + 1),
-			1000
-		) as unknown as number;
-		setIsRunning(true);
-	}, []);
 
-	const pauseTimer = useCallback(() => {
+		intervalRef.current = setInterval(() => {
+			setCounter((prev) => {
+				const newRoundTime = prev.roundTime + 1;
+
+				// Update in-memory state
+				const updated = { ...prev, roundTime: newRoundTime };
+
+				// Persist every tick
+				updateCounter("roundTime", newRoundTime);
+
+				return updated;
+			});
+		}, 1000);
+
+		setIsRunning(true);
+	};
+
+	const pauseTimer = () => {
 		if (intervalRef.current) {
 			clearInterval(intervalRef.current);
 			intervalRef.current = null;
 			setIsRunning(false);
 		}
-	}, []);
+	};
 
-	const stopTimer = useCallback(() => {
+	const stopTimer = () => {
 		pauseTimer();
-		setTime(0);
-		setIsRunning(false);
-	}, [pauseTimer]);
+	};
 
-	const handleChantTap = useCallback(() => {
+	const handleChantTap = () => {
 		const now = Date.now();
-		if (now - lastTapRef.current <= 1000) return;
+		if (now - lastTapRef.current <= 1000) return; // debounce
 		lastTapRef.current = now;
 
 		startTimer();
 
-		if (settings.vibrateOnEach) Haptics.selectionAsync();
+		if (count === settings.roundsCount) {
+			const newRound = rounds + 1;
+			updateCounterMultiple({
+				count: 0,
+				rounds: newRound,
+				roundTime: 0, // reset round time
+				roundsList: [
+					...roundsList,
+					{
+						round: newRound,
+						time: roundTime,
+					},
+				],
+			});
 
-		if (counter === 3) {
-			setCounter(1);
-			setRounds((prev) => prev + 1);
 			stopTimer();
 			startTimer();
 
-			if (settings.longVibrateOnLap) {
-				if (Platform.OS === "android") Vibration.vibrate(500);
-				else Vibration.vibrate();
-			}
-
-			setRoundsList((prev) => [...prev, { round: prev.length + 1, time }]);
+			if (settings.longVibrateOnLap) Vibration.vibrate(700);
 		} else {
-			setCounter((prev) => prev + 1);
+			updateCounter("count", counterData.count + 1);
+			if (settings.vibrateOnEach) Vibration.vibrate(250);
 		}
-	}, [counter, startTimer, stopTimer, time, settings]);
+	};
 
-	const formatTime = useCallback((seconds: number) => {
+	const formatTime = (seconds: number) => {
 		const m = Math.floor(seconds / 60)
 			.toString()
 			.padStart(2, "0");
 		const s = (seconds % 60).toString().padStart(2, "0");
 		return `${m}:${s}`;
-	}, []);
-
-	const toggleShowRounds = () => {
-		setShowRounds((prev) => !prev);
 	};
+
+	const toggleShowRounds = () => setShowRounds((prev) => !prev);
 
 	return (
 		<TimerContext.Provider
 			value={{
-				counter,
+				count,
 				showRounds,
 				isRunning,
 				rounds,
-				time,
+				time: roundTime,
 				roundsList,
 				startTimer,
 				pauseTimer,
@@ -126,9 +137,9 @@ export const TimerProvider: React.FC<{ children: React.ReactNode }> = ({
 	);
 };
 
-export const useTimerContext = () => {
+export const useTimer = () => {
 	const context = useContext(TimerContext);
 	if (!context)
-		throw new Error("useTimerContext must be used within a TimerProvider");
+		throw new Error("useTimerContext must be used within TimerProvider");
 	return context;
 };

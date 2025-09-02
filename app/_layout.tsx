@@ -5,8 +5,10 @@ import { DarkTheme, ThemeProvider } from "@react-navigation/native";
 import * as SplashScreen from "expo-splash-screen";
 import { colors } from "../lib/colors";
 import { SettingsProvider } from "../lib/context/SettingsContext";
+import { CounterProvider } from "../lib/context/CounterContext";
 import { TimerProvider } from "../lib/context/TimerContext";
 import { AppDrawer } from "../components/AppDrawer";
+import CustomToast from "@/components/CustomToast";
 
 // 👈 prevent auto-hide until fonts are ready
 SplashScreen.preventAutoHideAsync();
@@ -39,13 +41,18 @@ export default function Layout() {
 
 	return (
 		<SettingsProvider>
-			<TimerProvider>
-				<GestureHandlerRootView style={{ flex: 1, backgroundColor: colors.bg }}>
-					<ThemeProvider value={MyDarkTheme}>
-						<AppDrawer />
-					</ThemeProvider>
-				</GestureHandlerRootView>
-			</TimerProvider>
+			<CounterProvider>
+				<TimerProvider>
+					<GestureHandlerRootView
+						style={{ flex: 1, backgroundColor: colors.bg }}
+					>
+						<ThemeProvider value={MyDarkTheme}>
+							<AppDrawer />
+							<CustomToast />
+						</ThemeProvider>
+					</GestureHandlerRootView>
+				</TimerProvider>
+			</CounterProvider>
 		</SettingsProvider>
 	);
 }

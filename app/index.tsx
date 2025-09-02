@@ -6,7 +6,7 @@ import {
 	StyleSheet,
 	Pressable,
 } from "react-native";
-import { useTimerContext } from "../lib/context/TimerContext";
+import { useTimer } from "../lib/context/TimerContext";
 import { colors } from "../lib/colors";
 import { defaultFont } from "../lib/fonts";
 
@@ -14,14 +14,8 @@ const oneDigitDots = "........................";
 const doubleDigitDots = "......................";
 
 export default function Index() {
-	const {
-		showRounds,
-		counter,
-		rounds,
-		roundsList,
-		handleChantTap,
-		formatTime,
-	} = useTimerContext();
+	const { showRounds, count, rounds, roundsList, handleChantTap, formatTime } =
+		useTimer();
 
 	return (
 		<Pressable style={{ flex: 1 }} onPress={handleChantTap}>
@@ -36,7 +30,7 @@ export default function Index() {
 					{/* Current round */}
 					<View style={[styles.flexRow, { marginTop: 10 }]}>
 						<View style={styles.dot} />
-						<Text style={styles.bigText}>{counter}</Text>
+						<Text style={styles.bigText}>{count}</Text>
 					</View>
 
 					{/* Rounds */}

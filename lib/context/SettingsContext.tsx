@@ -22,7 +22,7 @@ export function SettingsProvider({ children }: { children: React.ReactNode }) {
 
 	useEffect(() => {
 		(async () => {
-			const loaded = await SettingsService.load();
+			const loaded = await SettingsService.get();
 			setSettings(loaded);
 		})();
 	}, []);
