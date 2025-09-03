@@ -1,6 +1,5 @@
 // lib/context/TimerContext.tsx
 import React, { createContext, useContext, useState, useRef } from "react";
-import BackgroundTimer from "react-native-background-timer";
 import { Vibration } from "react-native";
 import { Round } from "../services/CounterService";
 import { useCounter } from "./CounterContext";
@@ -17,7 +16,7 @@ interface TimerContextType {
 	startTimer: () => void;
 	pauseTimer: () => void;
 	stopTimer: () => void;
-	handleChantTap: () => void;
+	handleChant: () => void;
 	formatTime: (seconds: number) => string;
 }
 
@@ -73,7 +72,7 @@ export const TimerProvider: React.FC<{ children: React.ReactNode }> = ({
 		pauseTimer();
 	};
 
-	const handleChantTap = () => {
+	const handleChant = () => {
 		const now = Date.now();
 		if (now - lastTapRef.current <= 1000) return; // debounce
 		lastTapRef.current = now;
@@ -128,7 +127,7 @@ export const TimerProvider: React.FC<{ children: React.ReactNode }> = ({
 				pauseTimer,
 				stopTimer,
 				toggleShowRounds,
-				handleChantTap,
+				handleChant,
 				formatTime,
 			}}
 		>

@@ -34,7 +34,6 @@ export function CounterProvider({ children }: { children: React.ReactNode }) {
 	) => {
 		setCounter((prev) => {
 			const newCounter = { ...prev, [key]: value };
-			console.log("new counter: ", newCounter, key, value);
 			CounterService.update(key, value); // no stale state
 			return newCounter;
 		});
