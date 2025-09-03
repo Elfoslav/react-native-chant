@@ -2,7 +2,7 @@
   "expo": {
     "name": "Chant!",
     "slug": "Chant",
-    "version": "1.0.0",
+    "version": "1.0.1",
     "orientation": "portrait",
     "icon": "./assets/images/icon.jpg",
     "scheme": "chant",
@@ -13,9 +13,9 @@
     },
     "android": {
       "package": "com.hromnik.chant",
-      "versionCode": 1,
+      "versionCode": 2,
       "adaptiveIcon": {
-        "foregroundImage": "./assets/images/pin.jpg",
+        "foregroundImage": "./assets/images/ic_launcher.png",
         "backgroundColor": "#000000"
       },
       "edgeToEdgeEnabled": true
@@ -30,12 +30,12 @@
       [
         "expo-splash-screen",
         {
-          "image": "./assets/images/icon.jpg",
+          "image": "./assets/images/icon_512x512.png",
           "imageWidth": 200,
           "resizeMode": "contain",
           "backgroundColor": "#000000",
           "dark": {
-            "image": "./assets/images/icon.jpg",
+            "image": "./assets/images/icon_512x512.png",
             "backgroundColor": "#000000"
           },
         }
