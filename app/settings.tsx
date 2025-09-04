@@ -7,6 +7,7 @@ import CustomCheckbox from "../components/CustomCheckbox";
 import { useSettings } from "../lib/context/SettingsContext";
 import { useCounter } from "../lib/context/CounterContext";
 import { useTimer } from "../lib/context/TimerContext";
+import { SettingsService } from "@/lib/services/SettingsService";
 
 const ACTIONS = {
 	VIBRATE_ON_EACH: "vibrateOnEach",
@@ -20,7 +21,9 @@ export default function SettingsPage() {
 	const { resetCounter } = useCounter();
 	const { stopTimer } = useTimer();
 	const { settings, updateSetting } = useSettings();
-	const [rounds, setRounds] = useState<number | null>(settings.roundsCount);
+	const [rounds, setRounds] = useState<number | null>(
+		settings.roundsCount || SettingsService.defaultSettings.roundsCount
+	);
 
 	useEffect(() => {
 		// Detect press back on keyboard
