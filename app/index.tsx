@@ -6,6 +6,7 @@ import {
 	GestureDetector,
 	GestureHandlerRootView,
 } from "react-native-gesture-handler";
+// import { VolumeManager } from "react-native-volume-manager";
 import { runOnJS } from "react-native-reanimated";
 import Toast from "react-native-toast-message";
 import { useTimer } from "../lib/context/TimerContext";
@@ -13,6 +14,7 @@ import { colors } from "../lib/colors";
 import { defaultFont } from "../lib/fonts";
 import { useSettings } from "@/lib/context/SettingsContext";
 import { defaultSettings } from "@/lib/services/SettingsService";
+import SystemSetting from "react-native-system-setting";
 
 const oneDigitDots = "........................";
 const doubleDigitDots = "......................";
@@ -63,14 +65,38 @@ export default function Index() {
 	);
 
 	useEffect(() => {
+		const listener = SystemSetting.addVolumeListener((data) => {
+			// const volume = data.value;
+			// console.log(volume);
+			if (settings.countOnVolumePress) {
+				handleChant();
+			}
+		});
+
+		return () => SystemSetting.removeListener(listener);
+	}, [handleChant, settings.countOnVolumePress]);
+
+	useEffect(() => {
+		if (!settings.countOnSwipeDown && !settings.countOnSwipeUp) return;
+
+		let msg = "Swipe UP to trigger counter & timer";
+
+		if (settings.countOnSwipeDown) {
+			msg = "Swipe DOWN to trigger counter & timer";
+		}
+
+		if (settings.countOnSwipeUp && settings.countOnSwipeDown) {
+			msg = "Swipe UP or DOWN to trigger counter & timer";
+		}
+
 		Toast.show({
 			type: "customToast", // 'success' | 'error' | 'info'
 			text1: "Info",
-			text2: "Swipe down to trigger counter & timer",
+			text2: msg,
 			position: "bottom",
 			visibilityTime: 4500, // milliseconds
 		});
-	}, []);
+	}, [settings.countOnSwipeUp, settings.countOnSwipeDown]);
 
 	return (
 		<GestureHandlerRootView style={{ flex: 1 }}>

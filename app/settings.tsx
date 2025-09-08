@@ -13,6 +13,7 @@ import {
 } from "@/lib/services/SettingsService";
 
 const ACTIONS = {
+	COUNT_ON_VOLUME_PRESS: "countOnVolumePress",
 	COUNT_ON_SWIPE_UP: "countOnSwipeUp",
 	COUNT_ON_SWIPE_DOWN: "countOnSwipeDown",
 	VIBRATE_ON_EACH: "vibrateOnEach",
@@ -109,6 +110,30 @@ export default function SettingsPage() {
 						updateSetting(
 							ACTIONS.COUNT_ON_SWIPE_DOWN,
 							!(settings.countOnSwipeDown ?? defaultSettings.countOnSwipeDown)
+						)
+					}
+				/>
+			</View>
+
+			{/* Count on volume press */}
+			<View style={styles.flexRow}>
+				<Text
+					style={styles.text}
+					onPress={() =>
+						updateSetting(
+							ACTIONS.COUNT_ON_VOLUME_PRESS,
+							!settings.countOnVolumePress
+						)
+					}
+				>
+					count on volume press{" "}
+				</Text>
+				<CustomCheckbox
+					checked={settings.countOnVolumePress}
+					onChange={() =>
+						updateSetting(
+							ACTIONS.COUNT_ON_SWIPE_DOWN,
+							!settings.countOnVolumePress
 						)
 					}
 				/>

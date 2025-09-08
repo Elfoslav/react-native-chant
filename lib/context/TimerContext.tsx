@@ -98,6 +98,7 @@ export const TimerProvider: React.FC<{ children: React.ReactNode }> = ({
 			startTimer();
 
 			if (settings.longVibrateOnLap) Vibration.vibrate(700);
+			else if (settings.vibrateOnEach) Vibration.vibrate(250);
 		} else {
 			updateCounter("count", counterData.count + 1);
 			if (settings.vibrateOnEach) Vibration.vibrate(250);

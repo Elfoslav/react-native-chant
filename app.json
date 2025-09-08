@@ -9,7 +9,8 @@
     "userInterfaceStyle": "automatic",
     "newArchEnabled": true,
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "bundleIdentifier": "com.hromnik.chant"
     },
     "android": {
       "package": "com.hromnik.chant",
@@ -37,7 +38,7 @@
           "dark": {
             "image": "./assets/images/icon_512x512.png",
             "backgroundColor": "#000000"
-          },
+          }
         }
       ],
       [

@@ -1,6 +1,7 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
 export type Settings = {
+  countOnVolumePress: boolean;
   countOnSwipeUp: boolean;
   countOnSwipeDown: boolean;
   vibrateOnEach: boolean;
@@ -12,6 +13,7 @@ export type Settings = {
 const STORAGE_KEY = "settings";
 
 export const defaultSettings: Settings = {
+  countOnVolumePress: false,
   countOnSwipeUp: true,
   countOnSwipeDown: false,
   vibrateOnEach: false,
