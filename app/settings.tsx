@@ -7,9 +7,14 @@ import CustomCheckbox from "../components/CustomCheckbox";
 import { useSettings } from "../lib/context/SettingsContext";
 import { useCounter } from "../lib/context/CounterContext";
 import { useTimer } from "../lib/context/TimerContext";
-import { SettingsService } from "@/lib/services/SettingsService";
+import {
+	defaultSettings,
+	SettingsService,
+} from "@/lib/services/SettingsService";
 
 const ACTIONS = {
+	COUNT_ON_SWIPE_UP: "countOnSwipeUp",
+	COUNT_ON_SWIPE_DOWN: "countOnSwipeDown",
 	VIBRATE_ON_EACH: "vibrateOnEach",
 	LONG_VIBRATE_ON_TAP: "longVibrateOnLap",
 	VOLUME_BUTTON_SWIPES: "volumeButtonSwipes",
@@ -58,6 +63,58 @@ export default function SettingsPage() {
 					reset counter
 				</Text>
 			</View>
+
+			{/* Count on swipe up */}
+			<View style={styles.flexRow}>
+				<Text
+					style={styles.text}
+					onPress={() =>
+						updateSetting(
+							ACTIONS.COUNT_ON_SWIPE_UP,
+							!(settings.countOnSwipeUp ?? defaultSettings.countOnSwipeUp)
+						)
+					}
+				>
+					count on swipe up
+				</Text>
+				<CustomCheckbox
+					checked={settings.countOnSwipeUp ?? defaultSettings.countOnSwipeUp}
+					onChange={() =>
+						updateSetting(
+							ACTIONS.COUNT_ON_SWIPE_UP,
+							!(settings.countOnSwipeUp ?? defaultSettings.countOnSwipeUp)
+						)
+					}
+				/>
+			</View>
+
+			{/* Count on swipe down */}
+			<View style={styles.flexRow}>
+				<Text
+					style={styles.text}
+					onPress={() =>
+						updateSetting(
+							ACTIONS.COUNT_ON_SWIPE_DOWN,
+							!settings.countOnSwipeDown
+						)
+					}
+				>
+					count on swipe down{" "}
+				</Text>
+				<CustomCheckbox
+					checked={
+						settings.countOnSwipeDown ?? defaultSettings.countOnSwipeDown
+					}
+					onChange={() =>
+						updateSetting(
+							ACTIONS.COUNT_ON_SWIPE_DOWN,
+							!(settings.countOnSwipeDown ?? defaultSettings.countOnSwipeDown)
+						)
+					}
+				/>
+			</View>
+
+			{/* Vibrate on each */}
 			<View style={styles.flexRow}>
 				<Text
 					style={styles.text}
@@ -74,6 +131,8 @@ export default function SettingsPage() {
 					}
 				/>
 			</View>
+
+			{/* Long vibrate on tap */}
 			<View style={styles.flexRow}>
 				<Text
 					style={styles.text}

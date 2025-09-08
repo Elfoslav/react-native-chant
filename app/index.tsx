@@ -11,37 +11,55 @@ import Toast from "react-native-toast-message";
 import { useTimer } from "../lib/context/TimerContext";
 import { colors } from "../lib/colors";
 import { defaultFont } from "../lib/fonts";
+import { useSettings } from "@/lib/context/SettingsContext";
+import { defaultSettings } from "@/lib/services/SettingsService";
 
 const oneDigitDots = "........................";
 const doubleDigitDots = "......................";
-const SWIPE_THRESHOLD = -50;
+const SWIPE_THRESHOLD = 50;
 const HORIZONTAL_TOLERANCE = 200;
 
 export default function Index() {
+	const { settings } = useSettings();
 	const { showRounds, count, rounds, roundsList, handleChant, formatTime } =
 		useTimer();
 
 	const nativeScroll = Gesture.Native();
 
-	const swipeDownGesture = useMemo(
+	const swipeGesture = useMemo(
 		() =>
 			Gesture.Pan()
 				.onFinalize((event) => {
 					try {
 						const translationY = event.translationY ?? 0;
 						const translationX = event.translationX ?? 0;
-						if (
-							translationY < SWIPE_THRESHOLD &&
-							Math.abs(translationX) < HORIZONTAL_TOLERANCE
-						) {
-							runOnJS(handleChant)();
+
+						// Make sure gesture is "long enough" to be considered a swipe
+						if (Math.abs(translationY) < SWIPE_THRESHOLD) {
+							return; // too small -> probably just a tap
+						}
+
+						// Ensure mostly vertical swipe
+						if (Math.abs(translationX) < HORIZONTAL_TOLERANCE) {
+							if (
+								(settings.countOnSwipeUp ?? defaultSettings.countOnSwipeUp) &&
+								translationY < -SWIPE_THRESHOLD // swipe up
+							) {
+								runOnJS(handleChant)();
+							} else if (
+								(settings.countOnSwipeDown ??
+									defaultSettings.countOnSwipeDown) &&
+								translationY > SWIPE_THRESHOLD // swipe down
+							) {
+								runOnJS(handleChant)();
+							}
 						}
 					} catch (e) {
 						console.log(e);
 					}
 				})
 				.requireExternalGestureToFail(nativeScroll),
-		[handleChant, nativeScroll]
+		[settings, handleChant, nativeScroll]
 	);
 
 	useEffect(() => {
@@ -56,7 +74,7 @@ export default function Index() {
 
 	return (
 		<GestureHandlerRootView style={{ flex: 1 }}>
-			<GestureDetector gesture={swipeDownGesture}>
+			<GestureDetector gesture={swipeGesture}>
 				<View style={styles.mainView}>
 					{/* Current round */}
 					<View style={[styles.flexRow, { marginTop: 15 }]}>
