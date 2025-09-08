@@ -132,7 +132,7 @@ export default function SettingsPage() {
 					checked={settings.countOnVolumePress}
 					onChange={() =>
 						updateSetting(
-							ACTIONS.COUNT_ON_SWIPE_DOWN,
+							ACTIONS.COUNT_ON_VOLUME_PRESS,
 							!settings.countOnVolumePress
 						)
 					}
