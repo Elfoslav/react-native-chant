@@ -2,7 +2,7 @@
   "expo": {
     "name": "Chant!",
     "slug": "Chant",
-    "version": "1.0.4",
+    "version": "1.0.5",
     "orientation": "portrait",
     "icon": "./assets/images/icon.jpg",
     "scheme": "chant",
@@ -14,7 +14,7 @@
     },
     "android": {
       "package": "com.hromnik.chant",
-      "versionCode": 5,
+      "versionCode": 6,
       "adaptiveIcon": {
         "foregroundImage": "./assets/images/ic_launcher.png",
         "backgroundColor": "#000000"
