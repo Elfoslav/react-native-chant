@@ -1,5 +1,6 @@
 import { useMemo, useEffect } from "react";
 import { Text, View, Image, StyleSheet } from "react-native";
+import { VolumeManager, VolumeResult } from "react-native-volume-manager";
 import {
 	ScrollView,
 	Gesture,
@@ -14,7 +15,6 @@ import { colors } from "../lib/colors";
 import { defaultFont } from "../lib/fonts";
 import { useSettings } from "@/lib/context/SettingsContext";
 import { defaultSettings } from "@/lib/services/SettingsService";
-import SystemSetting from "react-native-system-setting";
 
 const oneDigitDots = "........................";
 const doubleDigitDots = "......................";
@@ -22,6 +22,7 @@ const SWIPE_THRESHOLD = 50;
 const HORIZONTAL_TOLERANCE = 200;
 
 export default function Index() {
+	VolumeManager.showNativeVolumeUI({ enabled: false });
 	const { settings } = useSettings();
 	const { showRounds, count, rounds, roundsList, handleChant, formatTime } =
 		useTimer();
@@ -65,15 +66,28 @@ export default function Index() {
 	);
 
 	useEffect(() => {
-		const listener = SystemSetting.addVolumeListener((data) => {
-			// const volume = data.value;
-			// console.log(volume);
+		const handleVolume = async (newVolume: VolumeResult) => {
+			const { volume } = newVolume ?? (await VolumeManager.getVolume());
+
+			if (volume === 1) {
+				// At max → nudge slightly down
+				await VolumeManager.setVolume(0.94 - Math.random() / 100);
+			} else if (volume === 0) {
+				// At min → nudge slightly up
+				await VolumeManager.setVolume(0.13 + Math.random() / 100);
+			}
+
 			if (settings.countOnVolumePress) {
 				handleChant();
 			}
+		};
+
+		const volumeListener = VolumeManager.addVolumeListener((result) => {
+			handleVolume(result);
 		});
 
-		return () => SystemSetting.removeListener(listener);
+		// Remove the volume listener
+		return () => volumeListener.remove();
 	}, [handleChant, settings.countOnVolumePress]);
 
 	useEffect(() => {
