@@ -91,11 +91,7 @@ export default function Index() {
 		const handleVolume = async (newVolume: VolumeResult) => {
 			if (settings.countOnVolumePress) {
 				const { volume } = newVolume ?? (await VolumeManager.getVolume());
-				console.log("before reset: ", volume);
-
 				await resetVolume(volume);
-
-				console.log("after reset", (await VolumeManager.getVolume()).volume);
 				handleChant();
 			}
 		};
