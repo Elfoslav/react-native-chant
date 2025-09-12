@@ -7,8 +7,6 @@ import {
 	GestureDetector,
 	GestureHandlerRootView,
 } from "react-native-gesture-handler";
-// import { VolumeManager } from "react-native-volume-manager";
-import { runOnJS } from "react-native-reanimated";
 import Toast from "react-native-toast-message";
 import { useTimer } from "../lib/context/TimerContext";
 import { colors } from "../lib/colors";
@@ -47,13 +45,13 @@ export default function Index() {
 								(settings.countOnSwipeUp ?? defaultSettings.countOnSwipeUp) &&
 								translationY < -SWIPE_THRESHOLD // swipe up
 							) {
-								runOnJS(handleChant)();
+								handleChant();
 							} else if (
 								(settings.countOnSwipeDown ??
 									defaultSettings.countOnSwipeDown) &&
 								translationY > SWIPE_THRESHOLD // swipe down
 							) {
-								runOnJS(handleChant)();
+								handleChant();
 							}
 						}
 					} catch (e) {
