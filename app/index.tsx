@@ -22,7 +22,6 @@ const SWIPE_THRESHOLD = 50;
 const HORIZONTAL_TOLERANCE = 200;
 
 export default function Index() {
-	VolumeManager.showNativeVolumeUI({ enabled: true });
 	const { settings } = useSettings();
 	const { showRounds, count, rounds, roundsList, handleChant, formatTime } =
 		useTimer();
@@ -65,22 +64,40 @@ export default function Index() {
 		[settings, handleChant, nativeScroll]
 	);
 
+	const resetVolume = async (volume: number) => {
+		const MIN_VOLUME = 0.08;
+		const MAX_VOLUME = 0.93;
+
+		if (volume >= MAX_VOLUME) {
+			// At max → nudge slightly down
+			await VolumeManager.setVolume(0.93 - Math.random() / 100);
+		} else if (volume <= MIN_VOLUME) {
+			// At min → nudge slightly up
+			await VolumeManager.setVolume(0.14 + Math.random() / 10);
+		}
+	};
+
+	useEffect(() => {
+		const setupVolume = async () => {
+			if (settings.countOnVolumePress) {
+				await VolumeManager.showNativeVolumeUI({ enabled: false });
+				const { volume } = await VolumeManager.getVolume();
+				await resetVolume(volume);
+			}
+		};
+
+		setupVolume();
+	}, [settings.countOnVolumePress]);
+
 	useEffect(() => {
 		const handleVolume = async (newVolume: VolumeResult) => {
-			const MIN_VOLUME = 0.01;
-			const MAX_VOLUME = 0.99;
-			const { volume } = newVolume ?? (await VolumeManager.getVolume());
-			console.log(volume);
-
-			if (volume >= MAX_VOLUME) {
-				// At max → nudge slightly down
-				await VolumeManager.setVolume(0.94 - Math.random() / 100);
-			} else if (volume <= MIN_VOLUME) {
-				// At min → nudge slightly up
-				await VolumeManager.setVolume(0.13 + Math.random() / 10);
-			}
-
 			if (settings.countOnVolumePress) {
+				const { volume } = newVolume ?? (await VolumeManager.getVolume());
+				console.log("before reset: ", volume);
+
+				await resetVolume(volume);
+
+				console.log("after reset", (await VolumeManager.getVolume()).volume);
 				handleChant();
 			}
 		};
