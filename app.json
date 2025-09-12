@@ -4,7 +4,7 @@
     "slug": "Chant",
     "version": "1.0.5",
     "orientation": "portrait",
-    "icon": "./assets/images/icon.jpg",
+    "icon": "./assets/images/icon_512x512.png",
     "scheme": "chant",
     "userInterfaceStyle": "automatic",
     "newArchEnabled": true,

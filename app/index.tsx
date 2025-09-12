@@ -22,7 +22,7 @@ const SWIPE_THRESHOLD = 50;
 const HORIZONTAL_TOLERANCE = 200;
 
 export default function Index() {
-	VolumeManager.showNativeVolumeUI({ enabled: false });
+	VolumeManager.showNativeVolumeUI({ enabled: true });
 	const { settings } = useSettings();
 	const { showRounds, count, rounds, roundsList, handleChant, formatTime } =
 		useTimer();
@@ -67,14 +67,17 @@ export default function Index() {
 
 	useEffect(() => {
 		const handleVolume = async (newVolume: VolumeResult) => {
+			const MIN_VOLUME = 0.01;
+			const MAX_VOLUME = 0.99;
 			const { volume } = newVolume ?? (await VolumeManager.getVolume());
+			console.log(volume);
 
-			if (volume === 1) {
+			if (volume >= MAX_VOLUME) {
 				// At max → nudge slightly down
 				await VolumeManager.setVolume(0.94 - Math.random() / 100);
-			} else if (volume === 0) {
+			} else if (volume <= MIN_VOLUME) {
 				// At min → nudge slightly up
-				await VolumeManager.setVolume(0.13 + Math.random() / 100);
+				await VolumeManager.setVolume(0.13 + Math.random() / 10);
 			}
 
 			if (settings.countOnVolumePress) {
