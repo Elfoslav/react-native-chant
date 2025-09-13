@@ -48,7 +48,7 @@ export default function SettingsPage() {
 		Toast.show({
 			type: "customToast", // 'success' | 'error' | 'info'
 			text1: "Counter reset",
-			text2: "The counter has been resetted",
+			text2: "The counter has been reset",
 			position: "bottom",
 			visibilityTime: 4500, // milliseconds
 		});
@@ -180,28 +180,7 @@ export default function SettingsPage() {
 					}
 				/>
 			</View>
-			{/* <View style={styles.flexRow}>
-				<Text
-					style={styles.text}
-					onPress={() =>
-						updateSetting(
-							ACTIONS.VOLUME_BUTTON_SWIPES,
-							!settings.volumeButtonSwipes
-						)
-					}
-				>
-					volume button swipes
-				</Text>
-				<CustomCheckbox
-					checked={settings.volumeButtonSwipes}
-					onChange={() =>
-						updateSetting(
-							ACTIONS.VOLUME_BUTTON_SWIPES,
-							!settings.volumeButtonSwipes
-						)
-					}
-				/>
-			</View> */}
+
 			<View style={styles.flexRow}>
 				<Text style={styles.text}>rounds count</Text>
 				<TextInput

@@ -23,6 +23,9 @@ export default function AboutPage() {
 
 	return (
 		<View style={styles.container}>
+			<View style={[styles.centeredRow, { marginBottom: 20 }]}>
+				<Text style={styles.text}>Chant:</Text>
+			</View>
 			<View style={[styles.centeredRow]}>
 				<Text style={styles.text}>Hare Krishna Hare Krishna</Text>
 			</View>
@@ -37,6 +40,7 @@ export default function AboutPage() {
 			</View>
 
 			<View style={styles.link}>
+				<Text style={styles.text}>Organisation</Text>
 				<TouchableOpacity
 					onPress={() =>
 						openWebsite("https://www.iskcon.org/about-us/what-is-iskcon.php")
@@ -47,13 +51,23 @@ export default function AboutPage() {
 					</Text>
 				</TouchableOpacity>
 			</View>
+
+			<View style={styles.link}>
+				<Text style={styles.text}>Developer</Text>
+				<TouchableOpacity
+					onPress={() => openWebsite("https://www.hromnik.com")}
+				>
+					<Text style={[styles.text, { textDecorationLine: "underline" }]}>
+						www.hromnik.com
+					</Text>
+				</TouchableOpacity>
+			</View>
 		</View>
 	);
 }
 
 const styles = StyleSheet.create({
 	container: {
-		marginVertical: 20,
 		alignItems: "center",
 	},
 	centeredRow: {
