@@ -3,7 +3,7 @@
     "name": "Chant!",
     "slug": "Chant",
     "version": "1.0.7",
-    "orientation": "default",
+    "orientation": "portrait",
     "icon": "./assets/images/icon_512x512.png",
     "scheme": "chant",
     "userInterfaceStyle": "automatic",
