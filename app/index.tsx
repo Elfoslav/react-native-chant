@@ -7,6 +7,7 @@ import {
 	GestureDetector,
 	GestureHandlerRootView,
 } from "react-native-gesture-handler";
+import { scheduleOnRN } from "react-native-worklets";
 import Toast from "react-native-toast-message";
 import { useTimer } from "../lib/context/TimerContext";
 import { colors } from "../lib/colors";
@@ -45,13 +46,13 @@ export default function Index() {
 								(settings.countOnSwipeUp ?? defaultSettings.countOnSwipeUp) &&
 								translationY < -SWIPE_THRESHOLD // swipe up
 							) {
-								handleChant();
+								scheduleOnRN(handleChant);
 							} else if (
 								(settings.countOnSwipeDown ??
 									defaultSettings.countOnSwipeDown) &&
 								translationY > SWIPE_THRESHOLD // swipe down
 							) {
-								handleChant();
+								scheduleOnRN(handleChant);
 							}
 						}
 					} catch (e) {
